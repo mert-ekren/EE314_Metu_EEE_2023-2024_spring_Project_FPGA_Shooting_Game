@@ -1,0 +1,15 @@
+module survival_time(clk,n);
+input clk;
+output reg [31:0] n;
+reg [31:0] k;
+initial begin
+k=0;
+end
+always @(posedge clk) begin
+	if (k==25000000) begin
+		n=n+1;
+		k=0;
+	end
+	k=k+1;
+end
+endmodule

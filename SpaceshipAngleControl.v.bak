@@ -1,0 +1,31 @@
+module SpaceshipAngleControl(
+    input clk,
+    input reset,
+    input rotate_left,  // Button input for rotating left
+    input rotate_right, // Button input for rotating right
+    output reg [8:0] angle // Current angle of the spaceship
+);
+
+    parameter ANGLE_STEP = 22.5; // Rotation step in degrees .5 çok kafama yatmadı
+    parameter MAX_ANGLE = 360;
+
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            angle <= 0; // Reset angle to 0
+        end else begin
+            if (rotate_left) begin
+                if (angle < ANGLE_STEP) begin
+                    angle <= MAX_ANGLE - ANGLE_STEP;
+                end else begin
+                    angle <= angle - ANGLE_STEP;
+                end
+            end else if (rotate_right) begin
+                if (angle >= MAX_ANGLE - ANGLE_STEP) begin
+                    angle <= 0;
+                end else begin
+                    angle <= angle + ANGLE_STEP;
+                end
+            end
+        end
+    end
+endmodule

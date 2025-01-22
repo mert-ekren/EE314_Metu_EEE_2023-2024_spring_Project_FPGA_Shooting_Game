@@ -1,0 +1,35 @@
+module SpaceshipController(
+    input clk,
+    input reset,
+    input rotate_left, // Button input for rotating left
+    input rotate_right, // Button input for rotating right
+    input fire, // Button input for firing projectiles
+    output [8:0] angle, // Current angle of the spaceship
+    output [9:0] projectile_x [0:15], // X-coordinates of projectiles
+    output [9:0] projectile_y [0:15], // Y-coordinates of projectiles
+    output [8:0] projectile_angle [0:15], // Angles of projectiles
+    output [3:0] num_projectiles // Number of active projectiles
+);
+
+    // Instantiate SpaceshipAngleControl
+    SpaceshipAngleControl angle_control (
+        .clk(clk),
+        .reset(reset),
+        .rotate_left(rotate_left),
+        .rotate_right(rotate_right),
+        .angle(angle)
+    );
+
+    // Instantiate SpaceshipShootingControl
+    SpaceshipShootingControl shooting_control (
+        .clk(clk),
+        .reset(reset),
+        .fire(fire),
+        .angle(angle),
+        .projectile_x(projectile_x),
+        .projectile_y(projectile_y),
+        .projectile_angle(projectile_angle),
+        .num_projectiles(num_projectiles)
+    );
+
+endmodule

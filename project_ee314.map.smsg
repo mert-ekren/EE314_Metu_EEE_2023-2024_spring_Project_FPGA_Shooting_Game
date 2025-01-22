@@ -1,0 +1,11 @@
+Warning (10268): Verilog HDL information at enemy.v(41): always construct contains both blocking and non-blocking assignments
+Warning (10268): Verilog HDL information at enemy_drawing.v(78): always construct contains both blocking and non-blocking assignments
+Warning (10268): Verilog HDL information at enemy_drawing2.v(78): always construct contains both blocking and non-blocking assignments
+Warning (10268): Verilog HDL information at enemy2.v(41): always construct contains both blocking and non-blocking assignments
+Warning (10268): Verilog HDL information at enemy3.v(41): always construct contains both blocking and non-blocking assignments
+Warning (10268): Verilog HDL information at enemy_drawing3.v(78): always construct contains both blocking and non-blocking assignments
+Warning (10268): Verilog HDL information at enemy4.v(41): always construct contains both blocking and non-blocking assignments
+Warning (10268): Verilog HDL information at enemy_drawing4.v(78): always construct contains both blocking and non-blocking assignments
+Warning (10268): Verilog HDL information at enemy5.v(41): always construct contains both blocking and non-blocking assignments
+Warning (10268): Verilog HDL information at enemy_drawing5.v(78): always construct contains both blocking and non-blocking assignments
+Warning (10268): Verilog HDL information at segmentation.v(7): always construct contains both blocking and non-blocking assignments

@@ -1,0 +1,251 @@
+module enemy(angle,type,clk,x,y,health,dealt,hit_angle,active,over);
+input clk;
+input [3:0] hit_angle;
+input [3:0] angle;
+input [1:0] type;
+output reg over;
+output reg [9:0] x;
+output reg [9:0] y;
+output reg[3:0] health;
+input [2:0] dealt;
+reg [3:0] damage;
+output reg active;
+reg f;
+localparam type0h=1;
+localparam type1h=2;
+localparam type2h=3;
+initial begin
+f=1;
+active=1;
+end
+//damage collector
+always @(posedge clk) begin
+	if (hit_angle==angle) begin
+		damage=damage+dealt;
+	end
+end
+//
+always @(posedge(clk)) begin
+	case(type)
+	0:
+		if (damage>=type0h) begin
+			active=0;
+		end
+		else begin
+			active=1;
+		end
+	1:
+		if (damage>=type1h) begin
+			active=0;
+		end
+		else begin
+			active=1;
+			health=type1h-damage;
+		end
+	2:
+		if (damage>=type2h) begin
+			active=0;
+		end
+		else begin
+			active=1;
+			health=type2h-damage;
+		end
+	endcase
+end
+//clock belongin below must be adjusted! kaç herz olduğunu konuşalım
+always @(posedge(clk)) begin
+	if (active) begin
+		if (angle==0 & f) begin
+			x=240;
+			y=0;
+			f=0;
+		end
+		if (angle==1 & f) begin
+			x=340;
+			y=0;
+			f=0;
+		end
+		if (angle==2 & f) begin
+			x=476;
+			y=0;
+			f=0;
+		end
+		if (angle==3 & f) begin
+			x=479;
+			y=140;
+			f=0;
+		end
+		if (angle==4 & f) begin
+			x=475;
+			y=240;
+			f=0;
+		end
+		if (angle==5 & f) begin
+			x=479;
+			y=340;
+			f=0;
+		end
+		if (angle==6 & f) begin
+			x=476;
+			y=476;
+			f=0;
+		end
+		if (angle==7 & f) begin
+			x=340;
+			y=479;
+			f=0;
+		end
+		if (angle==8 & f) begin
+			x=240;
+			y=475;
+			f=0;
+		end
+		if (angle==9 & f) begin
+			x=140;
+			y=479;
+			f=0;
+		end
+		if (angle==10 & f) begin
+			x=0;
+			y=476;
+			f=0;
+		end
+		if (angle==11 & f) begin
+			x=0;
+			y=340;
+			f=0;
+		end
+		if (angle==12 & f) begin
+			x=0;
+			y=240;
+			f=0;
+		end
+		if (angle==13 & f) begin
+			x=0;
+			y=140;
+			f=0;
+		end
+		if (angle==14 & f) begin
+			x=0;
+			y=0;
+			f=0;
+		end
+		if (angle==15 & f) begin
+			x=140;
+			y=0;
+			f=0;
+		end
+	// x's and y's are initialized!
+	case(angle)
+		0: begin 
+			y=y+5;
+			if (y==240 & x==240) begin
+				over=1;
+			end
+			end
+		1: begin	
+			x=x-2;
+			y=y+5;
+			if (y==240 & x==244) begin
+				over=1;
+			end
+			end
+		2: begin 
+			x=x-4;
+			y=y+4;
+			if (y==240 & x==240) begin
+				over=1;
+			end
+			end
+		3: begin
+			x=x-5;
+			y=y+2;
+			if (y==236 & x==239) begin
+				over=1;
+			end
+			end
+		4: begin
+			x=x-5;
+			if (y==240 & x==240) begin
+				over=1;
+			end
+			end
+		5: begin
+			x=x-5;
+			y=y-2;
+			if (y==244 & x==239) begin
+				over=1;
+			end
+			end
+		6: begin
+			x=x-4;
+			y=y-4;
+			if (y==240 & x==240) begin
+				over=1;
+			end
+			end
+		7: begin
+			x=x-2;
+			y=y-5;
+			if (y==239 & x==244) begin
+				over=1;
+			end
+			end
+		8: begin
+			y=y-5;
+			if (y==240 & x==240) begin
+				over=1;
+			end
+			end
+		9: begin
+			x=x+2;
+			y=y-5;
+			if (y==239 & x==236) begin
+				over=1;
+			end
+			end
+		10: begin
+			x=x+4;
+			y=y-4;
+			if (y==240 & x==240) begin
+				over=1;
+			end
+			end
+		11: begin
+			x=x+5;
+			y=y-2;
+			if (y==244 & x==240) begin
+				over=1;
+			end
+			end
+		12: begin
+			x=x+5;
+			if (y==240 & x==240) begin
+				over=1;
+			end
+			end
+		13: begin
+			x=x+5;
+			y=y+2;
+			if (y==236 & x==240) begin
+				over=1;
+			end
+			end
+		14: begin
+			x=x+4;
+			y=y+4;
+			if (y==240 & x==240) begin
+				over=1;
+			end
+			end
+		15: begin
+			x=x+2;
+			y=y+5;
+			if (y==240 & x==236) begin
+				over=1;
+			end
+			end
+	endcase
+	end
+end
+endmodule

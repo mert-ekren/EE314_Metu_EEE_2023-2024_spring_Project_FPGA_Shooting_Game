@@ -1,0 +1,55 @@
+module TopLevelDrawing(
+    input clk,
+    input reset,
+    input [9:0] hcount, // Current horizontal pixel coordinate from VGA driver
+    input [9:0] vcount, // Current vertical pixel coordinate from VGA driver
+    input [4:0] angle_idx, // Current angle index of the spaceship
+    output reg [23:0] rgb, // Output RGB value for the current pixel
+    output hsync, // Horizontal sync signal
+    output vsync // Vertical sync signal
+);
+
+    // Center of the screen for 640x480 resolution
+    parameter X_CENTER = 480;
+    parameter Y_CENTER = 240;
+
+    wire [23:0] player_rgb;
+    wire blank;
+
+    // Instantiate PlayerDrawing module
+    PlayerDrawing player_draw (
+        .hcount(hcount),
+        .vcount(vcount),
+        .x_center(X_CENTER),
+        .y_center(Y_CENTER),
+        .angle_idx(angle_idx),
+        .rgb(player_rgb)
+    );
+
+    // Instantiate VGADriver module
+    VGADriver vga_driver (
+        .clk(clk),
+        .reset(reset),
+        .hsync(hsync),
+        .vsync(vsync),
+        .hcount(hcount),
+        .vcount(vcount),
+        .blank(blank)
+    );
+
+    // Set the RGB output based on the player and enemy drawings
+    always @(posedge clk) begin
+        if (reset) begin
+            rgb <= 24'h000000;
+        end else if (!blank) begin
+            // player over enemies, enemies over background
+            if (player_rgb != 24'h000000) begin
+                rgb <= player_rgb;
+            end else begin
+                rgb <= 24'h000000;
+            end
+        end else begin
+            rgb <= 24'h000000;
+        end
+    end
+endmodule

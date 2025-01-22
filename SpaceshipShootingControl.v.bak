@@ -1,0 +1,49 @@
+module SpaceshipShootingControl(
+    input clk,
+    input reset,
+	 input shooting type,
+    input fire, // Button input for firing projectiles
+    input [8:0] angle, // Current angle of the spaceship
+    output reg [9:0] projectile_x [0:15], // X-coordinates of projectiles
+    output reg [9:0] projectile_y [0:15], // Y-coordinates of projectiles
+    output reg [8:0] projectile_angle [0:15], // Angles of projectiles
+    output reg [3:0] num_projectiles // Number of active projectiles
+);
+
+    parameter MAX_PROJECTILES = 16;
+    parameter PROJECTILE_SPEED = 5;
+
+    integer i;
+
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            num_projectiles <= 0;
+            for (i = 0; i < MAX_PROJECTILES; i = i + 1) begin
+                projectile_x[i] <= 0;
+                projectile_y[i] <= 0;
+                projectile_angle[i] <= 0;
+            end
+        end else begin
+            if (fire && num_projectiles < MAX_PROJECTILES) begin
+                projectile_x[num_projectiles] <= 320; // Starting x-coordinate (center of the screen)
+                projectile_y[num_projectiles] <= 240; // Starting y-coordinate (center of the screen)
+                projectile_angle[num_projectiles] <= angle; // Angle at which projectile is fired
+                num_projectiles <= num_projectiles + 1;
+            end
+
+            // Update projectile positions
+            for (i = 0; i < num_projectiles; i = i + 1) begin
+                if (projectile_x[i] > 0 && projectile_x[i] < 640 && projectile_y[i] > 0 && projectile_y[i] < 480) begin
+                    projectile_x[i] <= projectile_x[i] + PROJECTILE_SPEED * $cos(projectile_angle[i]);
+                    projectile_y[i] <= projectile_y[i] - PROJECTILE_SPEED * $sin(projectile_angle[i]);
+                end else begin
+                    // Remove projectile if it goes out of bounds
+                    projectile_x[i] <= projectile_x[num_projectiles - 1];
+                    projectile_y[i] <= projectile_y[num_projectiles - 1];
+                    projectile_angle[i] <= projectile_angle[num_projectiles - 1];
+                    num_projectiles <= num_projectiles - 1;
+                end
+            end
+        end
+    end
+endmodule
